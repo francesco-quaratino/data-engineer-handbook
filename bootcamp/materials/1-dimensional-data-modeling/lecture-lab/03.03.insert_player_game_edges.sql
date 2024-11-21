@@ -17,3 +17,18 @@ SELECT
         ) as properties
 FROM deduped
 WHERE row_num = 1;
+
+
+SELECT
+    v.properties->>'player_name',
+    MAX((e.properties->>'pts')::INTEGER) AS max_pts
+FROM vertices v 
+JOIN edges e 
+    ON v.identifier = e.subject_identifier 
+    AND v."type" = e.subject_type
+GROUP BY 
+    1
+HAVING 
+    MAX((e.properties->>'pts')::INTEGER) > 0
+ORDER BY 
+    2 DESC
